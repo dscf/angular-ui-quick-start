@@ -1,0 +1,19 @@
+.form-control,
+.btn,
+.panel,
+.popover,
+.label,
+.modal-content,
+.dropdown-menu,
+.alert,
+.checkbox label::before,
+.navbar-nav > li > .dropdown-menu, .btn-group > .btn,
+.pagination > li:first-child > a,
+.pagination > li:first-child > span,
+.pagination > li:last-child > a,
+.pagination > li:last-child > span,
+.form-group-sm .form-control,
+.progress,
+#toast-container .toast {
+  border-radius: 0px;
+}

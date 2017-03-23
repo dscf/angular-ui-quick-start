@@ -1,0 +1,145 @@
+$app-bg: #337AB7;
+$app-active: #286497;
+$fcolor: #ffffff;
+
+@mixin nav($bg, $active) {
+  .navbar-default {
+    background-color: $bg;
+    border-color: $active;
+    .navbar-brand {
+      color: $fcolor;
+      img {
+        margin-top: -8px;
+        display: inline-block;
+      }
+    }
+
+    .navbar-text {
+      color: $fcolor;
+    }
+    .navbar-nav {
+      > li {
+        > a, > a:hover, > a:focus {
+          color: $fcolor;
+        }
+      }
+      a:hover, a:focus {
+        color: $fcolor;
+        background-color: $active !important;
+      }
+      .active {
+        >a, a:hover {
+          color: $fcolor;
+          background-color: $active !important;
+        }
+      }
+      > .open {
+        a.dropdown-toggle {
+          color: $fcolor;
+          background-color: $active;
+        }
+        a:hover, a:focus {
+          color: $fcolor;
+          background-color: $active;
+        }
+      }
+    }
+    .navbar-toggle {
+      .icon-bar {
+        background-color: $fcolor;
+      }
+    }
+    .navbar-toggle, .navbar-toggle:hover, .navbar-toggle:focus {
+      border-color: $active;
+    }
+    .navbar-toggle:hover, .navbar-toggle:focus {
+      background-color: $active;
+    }
+    .navbar-link, .navbar-link:hover {
+      color: $fcolor;
+    }
+  }
+  #nav-header-divider > hr {
+    border-top: 1px solid #ddd;
+    width: 15px;
+    transform: rotate(90deg);
+    margin-top: 25px;
+
+  }
+
+  @media (max-width: 885px) and (min-width: 790px) {
+    .navbar-default {
+      .navbar-nav {
+        > li {
+          > a {
+            font-size: 11.2px;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 789px) and (min-width: 768px) {
+    .navbar-default {
+      .navbar-nav {
+        > li {
+          > a {
+            font-size: 10.3px;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 767px) {
+    .navbar-default {
+      .visible-xs.collapse {
+        display: none !important;
+      }
+      .visible-xs.collapse.in {
+        display: block !important;
+      }
+      .navbar-nav {
+        padding-left: 15px;
+        a, a:hover, a:focus {
+          color: $fcolor;
+        }
+        a {
+          background-color: $bg !important;
+        }
+        a:hover, a:focus {
+          background-color: $active !important;
+        }
+        .active {
+          a:hover, a:focus {
+            color: $fcolor;
+            background-color: $active !important;
+          }
+        }
+        .open {
+          .dropdown-menu {
+            > li {
+              > a, > a:hover, > a:focus {
+                color: $fcolor;
+              }
+
+              > a:hover, > a:focus {
+                background-color: $active !important;
+              }
+            }
+            > .active {
+              a:hover, a:focus {
+                color: $fcolor;
+                background-color: $active !important;
+              }
+            }
+          }
+        }
+      }
+    }
+    #nav-header-divider {
+      display: none;
+    }
+  }
+}
+.app {
+  @include nav($app-bg, $app-active);
+}

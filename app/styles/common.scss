@@ -1,0 +1,174 @@
+html {
+  position: relative;
+  margin: 0;
+  min-height: 100%;
+  body {
+    .page-header {
+      margin-top: 0;
+      > h3 {
+        margin-top: 0;
+      }
+    }
+    .page-header-command {
+      margin-bottom: 20px;
+    }
+    .pagination {
+      margin: 0;
+    }
+  }
+  .profile {
+    dl.dl-horizontal dd,
+    dl.dl-horizontal dt {
+      padding: 5px;
+    }
+  }
+}
+
+.main {
+  margin-bottom: 155px;
+  padding-top: 70px;
+}
+
+.table {
+  table-layout: fixed;
+  word-wrap: break-word;
+  .row-selected {
+    background-color: #f1f1f1 !important;
+  }
+  .row-active {
+    color: #fff;
+    background-color: #337ab7 !important;
+    border-colr: #337ab7 !important;
+  }
+}
+
+.nav, .pagination, .carousel, .panel-title, .dropdown-menu a {
+  cursor: pointer;
+}
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+//make navbar collapse animation faster
+.collapsing {
+  transition-duration: 0.2s;
+}
+
+.toast-top-center {
+  padding-top: 80px;
+}
+
+.toast-success {
+  background-color: #2CAB2C !important;
+}
+
+.alert {
+  font-weight: bold;
+}
+
+.form-text {
+  padding-top: 7px;
+}
+
+.dropzone {
+  border: 2px dashed #0087F7;
+}
+
+.dropzone .dz-preview .dz-error-message {
+  top: 150px !important;
+}
+
+.dz-success-mark svg g path {
+  fill: #2CAB2C;
+}
+
+.dz-error-mark svg g path {
+  fill: #B22424;
+}
+
+.ui-select-choices-group-label.dropdown-header {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+  padding-left: 7px;
+}
+
+.ui-select-bootstrap > .ui-select-choices, .ui-select-bootstrap > .ui-select-no-choice {
+  max-height: 400px;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #f9f9f9;
+}
+
+.scroll-button {
+  color: #9E7777;
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  z-index: 999;
+  opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.page-not-found {
+  background-color: #000;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  z-index: 0;
+  .content {
+    color: #fff;
+    margin-top: 10%;
+    background-color: transparent;
+    h1 {
+      font-size: 150px;
+    }
+    p {
+      font-size: 30px;
+    }
+    ul {
+      list-style: none;
+    }
+    li {
+      font-size: 20px;
+    }
+    a {
+      color: #fff;
+      text-decoration: none;
+      border-style: solid;
+      border-width: 0px 0px 1px 0px;
+    }
+  }
+  canvas {
+    z-index: -1;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+  }
+}
+
+.btn[disabled], .btn.disabled {
+  pointer-events: auto;
+}
+
+.ui-select-multiple.ui-select-bootstrap {
+  min-height: 30px;
+}
+
+.list-actions {
+  ul.dropdown-menu {
+    min-width: 100px;
+    left: -35px;
+  }
+}

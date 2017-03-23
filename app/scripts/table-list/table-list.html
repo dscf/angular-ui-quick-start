@@ -1,0 +1,160 @@
+<div class="page-header">
+  <h3>Some List</h3>
+</div>
+<ss-alert></ss-alert>
+<div class="row page-header-command">
+  <div class="col-sm-12">
+    <form class="form-inline">
+      <button ui-sref="main.item-add" class="btn btn-primary">
+        Create
+      </button>
+      <a class="btn btn-default" ng-click="vm.searchCollapsed = !vm.searchCollapsed">
+        <i class="fa fa-sliders fa-fw" aria-hidden="true"></i>
+        Filters <span ng-if="vm.filterNumber > 0" class="badge badge-primary">{{vm.filterNumber}}</span>
+      </a>
+    </form>
+  </div>
+</div>
+<div class="collapse" uib-collapse="vm.searchCollapsed"
+     ng-init="vm.searchCollapsed = true">
+  <form class="form-inline" novalidate>
+    <div class="form-group form-group-sm">
+      <input type="text" class="form-control" id="filter-name" autofocus
+             placeholder="Name"
+             ng-model="vm.filter.name">
+    </div>
+
+    <div class="form-group form-group-sm">
+      <ui-select multiple ng-model="vm.filter.users" theme="bootstrap" close-on-select="false" title="Select users"
+                 style="width: 300px" ng-class="{'full-width-sm': true}">
+        <ui-select-match placeholder="  Created By: All">{{$item.name}}
+        </ui-select-match>
+        <ui-select-choices repeat="user.email as user in vm.availableUsers | filter:$select.search" position="down">
+          <small ng-bind-html="user.name | highlight: $select.search">
+          </small>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group form-group-sm">
+      <select class="form-control input-sm" ng-model="vm.filter.sortBy">
+        <option value="">Sort by: N/A</option>
+        <option value="nameASC">A to Z</option>
+        <option value="nameDSC">Z to A</option>
+        <option value="dateASC">Oldest</option>
+        <option value="dateDSC">Latest</option>
+      </select>
+    </div>
+    <button ng-click="vm.updateSearch()" class="btn btn-primary btn-sm">Apply Filter</button>
+    <small ng-if="vm.getNumberOfActiveFilters()>0" class="m-l-1 vertical-align-sub">
+      <a href="" ng-click="vm.clearFilter()">
+        Clear All</a>
+    </small>
+  </form>
+  <hr class="visible-xs"/>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="pull-right">
+      <ss-page-size on-size-change="vm.changePageSize(size)" current-size="vm.pageSize"></ss-page-size>
+    </div>
+  </div>
+</div>
+<div class="row  p-t-1">
+  <div class="col-sm-12">
+    <table class="table table-hover table-condensed" block-ui="list">
+      <thead>
+      <tr>
+        <th class="col-sm-2">
+          Name
+        </th>
+        <th class="visible-lg col-sm-4">
+          Column 1
+        </th>
+        <th class="hidden-xs col-sm-1">
+          Column 2
+        </th>
+        <th class="hidden-xs col-sm-1">
+          Column 3
+        </th>
+        <th class="hidden-xs col-sm-1">
+          Created By
+        </th>
+        <th class="visible-lg col-sm-1">
+          Modified
+        </th>
+        <th class="col-sm-1">
+          Actions
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="item in vm.list" ng-click="vm.selectedItemId = item.id;"
+          ng-mouseover="vm.hoveredId = item.id"
+          ng-class="{'row-selected': vm.selectedItemId===item.id}">
+        <td style="height:45px">
+          {{::item.name}}
+          <div>
+            <small class="text-muted hidden-lg">{{::item.column1}}</small>
+          </div>
+          <div>
+            <small class="text-muted visible-xs">{{::item.column2}}</small>
+          </div>
+          <div>
+            <small class="text-muted visible-xs">{{::item.column3}}</small>
+          </div>
+          <div>
+            <small class="text-muted visible-xs">{{::item.createdBy}}</small>
+          </div>
+          <div>
+            <small class="text-muted hidden-lg">{{::item.updatedDate|date:"dd/MMM/yy h:mm a"}}</small>
+          </div>
+        </td>
+        <td class="visible-lg">{{::item.column1}}</td>
+        <td class="hidden-xs">{{::item.column2}}</td>
+        <td class="hidden-xs">{{::item.column3}}</td>
+        <td class="hidden-xs">{{::item.createdBy}}</td>
+        <td class="visible-lg">{{::item.updatedDate|date:"dd/MMM/yy h:mm a"}}</td>
+        <td class="cursor-pointer">
+          <i ng-if="vm.hoveredId === item.id && vm.selectedItemId !== item.id"
+             class="fa fa-ellipsis-h text-muted" aria-hidden="true"></i>
+          <div ng-if="vm.selectedItemId === item.id">
+            <button ng-disabled="!vm.canEdit(item) "
+                    class="btn btn-default"
+                    title="Edit"
+                    ui-sref="main.item-edit({id: item.id})">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </button>
+
+            <div class="btn-group list-actions" uib-dropdown>
+              <button type="button" class="btn btn-default" title="More Actions" uib-dropdown-toggle>
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem" ng-class="{'disabled':!vm.canEdit(item)}">
+                  <a ng-click="vm.remove(item)">
+                    <i class="fa fa-fw fa-trash" aria-hidden="true"></i>
+                    Delete
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <p ng-if="vm.currentPage" class="pull-left">Displaying {{(vm.currentPage - 1) * vm.pageSize +
+      1}} to
+      {{vm.currentPage * vm.pageSize>vm.totalItems? vm.totalItems:vm.currentPage * vm.pageSize}} of
+      {{vm.totalItems}} items</p>
+    <nav class="pull-right">
+      <ul uib-pagination boundary-links="true" direction-links="false"
+          items-per-page="vm.pageSize" total-items="vm.totalItems" ng-model="vm.currentPage" first-text="&laquo;"
+          last-text="&raquo;" ng-change="vm.pageChanged()"></ul>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div block-ui="main">
+  <div class="modal-header">
+    <h3 class="modal-title">{{g('CHANGE_PASSWORD', 'Change Password')}}</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div ng-form="form">
+          <form class="form-horizontal" novalidate name="modal.form">
+            <div class="form-group"
+                 ng-class="{'has-error': modal.form.password.$invalid && modal.form.password.$dirty}">
+              <label for="password" class="col-sm-2 control-label">{{g('PASSWORD', 'Password')}}</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control"
+                       name="password" id="password" placeholder="{{g('PASSWORD', 'Password')}}"
+                       ng-model="modal.password" required autofocus
+                       ng-keyup="modal.form.$valid && $event.keyCode == 13 && modal.save()">
+                <div ng-messages="modal.form.password.$error" role="alert" class=" text-danger"
+                     ng-if="modal.form.password.$dirty">
+                  <div ng-message="required">{{g('PASSWORD_REQUIRED', 'Password is required')}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group"
+                 ng-class="{'has-error': modal.form.question1.$invalid && modal.form.question1.$dirty}">
+              <label for="question1" class="col-sm-2 control-label">{{g('QUESTION1', 'Question 1')}}</label>
+              <div class="col-sm-10">
+                <select id="question1" ng-options="question for question in modal.questions track by question"
+                        name="question1"
+                        ng-model="modal.question1" class="form-control" required ng-change="modal.checkQuestions()">
+                </select>
+                <div ng-messages="modal.form.question1.$error" role="alert" class=" text-danger"
+                     ng-if="modal.form.question1.$dirty">
+                  <div ng-message="different">{{g('QUESTIONS_SHOULD_BE_DIFFERENT', 'Security Questions should be
+                    different')}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group"
+                 ng-class="{'has-error': modal.form.answer1.$invalid && modal.form.answer1.$dirty}">
+              <label for="answer1" class="col-sm-2 control-label">{{g('ANSWER1', 'Answer 1')}}</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control"
+                       name="answer1" id="answer1" placeholder="{{g('ANSWER1', 'Answer 1')}}"
+                       ng-model="modal.answer1" required
+                       ng-keyup="modal.form.$valid && $event.keyCode == 13 && modal.save()">
+                <div ng-messages="modal.form.answer1.$error" role="alert" class=" text-danger"
+                     ng-if="modal.form.answer1.$dirty">
+                  <div ng-message="required">{{g('ANSWER_REQUIRED', 'Answer is required')}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group"
+                 ng-class="{'has-error': modal.form.question2.$invalid && modal.form.question2.$dirty}">
+              <label for="question2" class="col-sm-2 control-label">{{g('QUESTION2', 'Question 2')}}</label>
+              <div class="col-sm-10">
+                <select id="question2" ng-options="question for question in modal.questions track by question"
+                        name="question2"
+                        ng-model="modal.question2" class="form-control" required ng-change="modal.checkQuestions()">
+                </select>
+                <div ng-messages="modal.form.question2.$error" role="alert" class=" text-danger"
+                     ng-if="modal.form.question2.$dirty">
+                  <div ng-message="different">{{g('QUESTIONS_SHOULD_BE_DIFFERENT', 'Security Questions should be
+                    different')}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group"
+                 ng-class="{'has-error': modal.form.answer2.$invalid && modal.form.answer2.$dirty}">
+              <label for="answer2" class="col-sm-2 control-label">{{g('ANSWER2', 'Answer 2')}}</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control"
+                       name="answer2" id="answer2" placeholder="{{g('ANSWER2', 'Answer 2')}}"
+                       ng-model="modal.answer2" required
+                       ng-keyup="modal.form.$valid && $event.keyCode == 13 && modal.save()">
+                <div ng-messages="modal.form.answer2.$error" role="alert" class=" text-danger"
+                     ng-if="modal.form.answer2.$dirty">
+                  <div ng-message="required">{{g('ANSWER_REQUIRED', 'Answer is required')}}</div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="modal.save()" ng-disabled="modal.form.$invalid">Save</button>
+    <button class="btn btn-default" ng-click="modal.close()">Cancel</button>
+  </div>
+</div>

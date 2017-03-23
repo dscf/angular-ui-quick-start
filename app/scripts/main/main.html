@@ -1,0 +1,43 @@
+<div class="app">
+  <ss-navbar>
+    <ul class="nav navbar-nav ">
+      <li uib-dropdown>
+        <a href role="button" uib-dropdown-toggle>
+          <span>Drop down</span>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" uib-dropdown-menu>
+          <li>
+            <a>
+              Menu 1 </a>
+          </li>
+          <li>
+            <a>
+              Menu 2
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="p-l-0 navbar-nav hidden-xs" id="nav-header-divider">
+      <hr/>
+    </ul>
+    <ul class="nav navbar-nav">
+      <li ss-sref-active="/list" ss-auth-check-show="canAccessTableList">
+        <a ui-sref="main.table-list({pageSize: 10, currentPage: 1})">
+          Table List</a>
+      </li>
+      <li>
+        <a>
+          Other Menu</a>
+      </li>
+    </ul>
+    <ss-navbar-common-menu></ss-navbar-common-menu>
+  </ss-navbar>
+  <div class="main">
+    <main class="container-fluid" block-ui="main">
+      <div ui-view></div>
+    </main>
+  </div>
+</div>
+<ss-footer></ss-footer>

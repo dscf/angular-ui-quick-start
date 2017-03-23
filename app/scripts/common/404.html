@@ -1,0 +1,403 @@
+<div class="page-not-found text-center">
+  <div class="container ">
+    <div class="content ">
+      <h1><i class="fa fa-chain-broken" aria-hidden="true"></i> 404</h1>
+      <p>Oops, page not found. You can either:</p>
+      <ul>
+        <li>Go back to the <a href="javascript:window.history.back()">previous
+          page</a></li>
+        <li>Go the the <a ui-sref="main.dashboard">dashboard</a></li>
+      </ul>
+    </div>
+    <canvas class="canvas"></canvas>
+  </div>
+</div>
+<script>
+  'use strict';
+  /**
+   * Utility methods
+   */
+  (function(w) {
+    /**
+     * Normalize requestAnimationFrame cross-browser
+     *
+     * @param {Function} callback - Function to call when it's time to update your animation for the next repaint.
+     * @param {HTMLElement} element - Optional parameter specifying the element that visually bounds the entire animation.
+     *
+     * @return {Number} requestAnimationFrame
+     */
+    if (!w.requestAnimationFrame) {
+      w.requestAnimationFrame = w.webkitRequestAnimationFrame || w.mozRequestAnimationFrame || w.oRequestAnimationFrame || w.msRequestAnimationFrame || function(callback) {
+          return w.setTimeout(callback, 1000 / 60);
+        };
+    }
+
+    /**
+     * Normalize cancelAnimationFrame cross-browser
+     *
+     * @param {Number} Animation frame request
+     */
+    if (!w.cancelAnimationFrame) {
+
+      w.cancelAnimationFrame = w.cancelRequestAnimationFrame || w.webkitCancelAnimationFrame || w.webkitCancelRequestAnimationFrame || w.mozCancelAnimationFrame || w.mozCancelRequestAnimationFrame || w.oCancelAnimationFrame || w.oCancelRequestAnimationFrame || w.msCancelAnimationFrame || w.msCancelRequestAnimationFrame || window.clearTimeout;
+    }
+
+    /**
+     * Utility methods
+     */
+    var utils = {};
+    w.utils = utils;
+
+    /**
+     * Check if rectangle contains x/y coordinates
+     *
+     * @param {Object} rect - object containing a rectangle
+     * @param {Number} rect.x - x-axis coordinate of a rectangle
+     * @param {Number} rect.y - y-axis coordinate of a rectangle
+     * @param {Number} rect.width - width of a rectangle
+     * @param {Number} rect.height - height of a rectangle
+     * @param {Number} x - target x-axis coordinate
+     * @param {Number} y - target y-axis coordinate
+     *
+     * @return {Boolean} true|false - if rect contains x/y coordinates
+     */
+    utils.containsPoint = function(rect, x, y) {
+      return !(x < rect.x || x > rect.x + rect.width || y < rect.y || y > rect.y + rect.height);
+    };
+
+    /**
+     * Check if two rectangles intersect
+     *
+     * @param {Object} rectA - first object with rectangular bounds
+     * @param {Object} rectB - second object with rectangular bounds
+     *
+     * @return {Boolean} true|false - if rect contains x/y coordinates
+     */
+    utils.intersects = function(rectA, rectB) {
+
+      return !(rectA.x + rectA.width < rectB.x || rectB.x + rectB.width < rectA.x || rectA.y + rectA.height < rectB.y || rectB.y + rectB.height < rectA.y);
+    };
+
+    /**
+     * Get random integer between two numbers
+     *
+     * @param {Number} min - Minimum value
+     * @param {Number} max - Maximum value
+     *
+     * @return {Number} randomized value between min and max
+     */
+    utils.rand = function(min, max) {
+      return Math.random() * (max - min) + min;
+    };
+
+    /**
+     * Get random integer between two numbers
+     *
+     * @param {Number} min - Minimum value
+     * @param {Number} max - Maximum value
+     *
+     * @return {Number} randomized value between min and max
+     */
+    utils.randInt = function(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    };
+
+    /**
+     * Get random integer that is a multiple within a range of numbers
+     *
+     * @param {Number} multiple - Multiple to increment by (and minimum value)
+     * @param {Number} range - Range of multiple (and maximum value)
+     *
+     * @return {Number} randomized value within range, incrementing by multiple
+     */
+    utils.randMultiple = function(multiple, range) {
+      return Math.floor((Math.random() * (range - multiple) + multiple + 1) / multiple) * multiple;
+    };
+
+    /**
+     * Get current screen size (width / height)
+     *
+     * @return {Object} screen - width / height of current screen object
+     */
+    utils.screenSize = function() {
+      var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.body,
+        x = w.innerWidth || e.clientWidth || g.clientWidth,
+        y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+      return {
+        width: x,
+        height: y
+      };
+    };
+
+    utils.colorToRGB = function(color, alpha) {
+      //number in octal format or string prefixed with #
+      if (typeof color === 'string' && color[0] === '#') {
+        color = window.parseInt(color.slice(1), 16);
+      }
+
+      alpha = alpha === undefined ? 1 : alpha;
+      //parse hex values
+
+      var r = color >> 16 & 0xff,
+        g = color >> 8 & 0xff,
+        b = color & 0xff,
+        a = alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
+      //only use 'rgba' if needed
+
+      if (a === 1) {
+        return "rgb(" + r + "," + g + "," + b + ")";
+      } else {
+        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+      }
+    };
+  })(window);
+
+  /**
+   * Ball class
+   */
+
+  /**
+   * Constructor
+   */
+  function Ball(radius, color, image) {
+    this.x = 0;
+    this.y = 0;
+    this.vx = 0;
+    this.vy = 0;
+    this.color = color || "#ff0000";
+    this.radius = radius || 40;
+    this.rotation = 0;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.lineWidth = 0;
+    this.image = image || null;
+    this.opacity = 1;
+  }
+
+  /**
+   * Draw
+   * @param (2DContext) context - Canvas context
+   */
+  Ball.prototype.draw = function(context, utils) {
+    context.save();
+    context.translate(this.x, this.y);
+    context.rotate(this.rotation);
+    context.scale(this.scaleX, this.scaleY);
+    context.lineWidth = this.lineWidth;
+
+    // If image was passed in
+    if (this.image) {
+      var ballWidth = this.radius * 2;
+      var imageHeight = ballWidth * (this.image.height / this.image.width);
+      context.drawImage(this.image, 0 - this.radius, 0 - imageHeight / 2, this.radius * 2, imageHeight);
+      context.fillStyle = "rgba(255, 255, 255, 0)";
+    } else {
+      if (utils) {
+        context.fillStyle = utils.colorToRGB(this.color, this.opacity);
+      } else {
+        context.fillStyle = this.color;
+      }
+    }
+
+    context.beginPath();
+    // x, y, radius, start_angle, end_angle, anti-clockwise
+    context.arc(0, 0, this.radius, 0, Math.PI * 2, true);
+    context.closePath();
+    context.fill();
+    if (this.lineWidth > 0) {
+      context.stroke();
+    }
+    context.restore();
+  };
+
+  /**
+   * getBounds
+   */
+  Ball.prototype.getBounds = function() {
+    return {
+      x: this.x - this.radius,
+      y: this.y - this.radius,
+      width: this.radius * 2,
+      height: this.radius * 2
+    };
+  };
+  /**
+   * Time travelin'
+   */
+  (function(w, $) {
+    'use strict';
+    var
+      /**
+       * Globals
+       */
+      utils = w.utils,
+      requestAnimationFrame = w.requestAnimationFrame,
+
+      /**
+       * Canvas environment variables
+       */
+      $canvas = $('.canvas')[0],
+      context = $canvas.getContext('2d'),
+      center = new Ball(5, 'rgba(0,0,0,0)'),
+      left = 0,
+      top = 0,
+      right = utils.screenSize().width,
+      bottom = utils.screenSize().height,
+
+      /**
+       * Particle settings
+       */
+      balls = [],
+      numOfBalls = 250,
+      colors = ['#5C4D91', '#332A53', '#F2CC76', '#1E1836'],
+      speed = .5,
+      range = 0.01,
+      trailLength = 88;
+
+    $canvas.width = utils.screenSize().width;
+    $canvas.height = utils.screenSize().height;
+
+    center.x = $canvas.width / 2;
+    center.y = $canvas.height / 2;
+
+    /**
+     * Resize canvas to fullscreen
+     */
+    window.addEventListener('resize', windowResizeCallback);
+
+    /**
+     * Window Resize Callback
+     */
+    function windowResizeCallback() {
+      $canvas.width = right = utils.screenSize().width;
+      $canvas.height = bottom = utils.screenSize().height;
+      center.x = $canvas.width / 2;
+      center.y = $canvas.height / 2;
+    }
+
+    /**
+     * Generate ball coordinates and velocity (speed * direcrion)
+     *
+     * @param {Object} ball - Instance 2D Ball context
+     *
+     * @return {Object} ball - Updated instance of Ball
+     */
+    function generateVelocity(ball) {
+
+      // Set starting position
+      ball.x = utils.randInt(0, $canvas.width);
+      ball.y = utils.randInt(0, $canvas.height);
+
+      // Get distance to target
+      var dx = $canvas.width / 2 - ball.x,
+        dy = $canvas.height / 2 - ball.y,
+        angle = Math.atan2(dy, dx);
+
+      // Set velocity
+      ball.vx = Math.cos(angle) * speed;
+      ball.vy = Math.sin(angle) * speed;
+
+      // Set aggregate velocity
+      ball.velocity = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+
+      // Set opacity
+      ball.opacity = 0;
+
+      return ball;
+    }
+
+    /**
+     * Detect boundaries of canvas
+     *
+     * @param {Object} ball - Instance 2D Ball context
+     *
+     * @return {Object} ball - Updated instance of Ball
+     */
+    function boundaryDetection(ball, index) {
+      // Check if ball is outside
+      // boundary of canvas window
+      // and reset position/velocity if so
+      var bounds = center.getBounds();
+      if (utils.containsPoint(bounds, ball.x, ball.y) || ball.x + ball.radius < left || ball.x - ball.radius > right || ball.y + ball.radius < top || ball.y - ball.radius > bottom) {
+        if (index > numOfBalls) {
+
+          balls.splice(index, 1);
+          return null;
+        } else {
+          return generateVelocity(ball);
+        }
+      } else {
+        return ball;
+      }
+    }
+
+    /**
+     * Draw ball motion
+     *
+     * @param {Object} ball - Instance 2D Ball context
+     */
+    function drawBall(ball, index) {
+      // Move balls
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      // Fade in from center
+      if (ball.opacity < 1) {
+        ball.opacity += ball.velocity * range;
+      }
+
+      // Reset ball velocity when it
+      // reaches the edge of screen
+      ball = boundaryDetection(ball, index);
+
+      // draw ball to canvas
+      if (ball) {
+        ball.draw(context, utils);
+      }
+    }
+
+    /**
+     * Generate particles
+     */
+    function generateParticles(particles, num) {
+      for (var i = 0; i < num; i++) {
+        // Generate new Ball instance
+        var particle = new Ball(
+          // Random size from 1-4
+          utils.randInt(1, 4),
+          // Random color from colors array
+          colors[utils.randInt(0, colors.length)]);
+        // Set ball velocity
+        particle = generateVelocity(particle);
+        // Add ball to array
+        particles.push(particle);
+      }
+      return particles;
+    }
+
+    generateParticles(balls, numOfBalls);
+
+    /**
+     * Animation loop
+     */
+    (function animate() {
+      // Call request animation frame recursively
+      requestAnimationFrame(animate, $canvas);
+
+      // Clear canvas every frame
+      context.fillStyle = utils.colorToRGB('#000000', (100 - trailLength) / 100);
+      context.fillRect(left, top, right, bottom);
+
+      // do stuff...
+      balls.forEach(function(ball, index) {
+        drawBall(ball, index);
+      });
+    })();
+  })(window, document.querySelectorAll.bind(document));
+
+</script>
+

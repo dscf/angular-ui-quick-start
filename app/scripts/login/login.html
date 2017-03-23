@@ -1,0 +1,47 @@
+<div class="login" ss-login-background>
+  <div class="login-container">
+    <ss-alert></ss-alert>
+    <div class="panel panel-default">
+      <div class="panel-heading text-center logo">
+        LOGO
+      </div>
+      <div class="panel-body" style="">
+        <form class="login-form m-t-1" name="vm.form" novalidate>
+          <div class="form-group">
+            <input id="user-name" type="text" class="form-control" placeholder="User Name"
+                   autofocus name="userName"
+                   ng-model="vm.userName" required>
+            <label class="fa fa-user form-icon" for="user-name"></label>
+            <div ng-messages="vm.form.userName.$error" role="alert" class=" text-danger"
+                 ng-if="vm.form.userName.$dirty">
+              <div ng-message="required">Name is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <input id="password" type="password" class="form-control" placeholder="Password"
+                   ng-model="vm.password" name="password"
+                   required>
+            <label class="fa fa-lock form-icon" for="password"></label>
+            <div ng-messages="vm.form.password.$error" role="alert" class=" text-danger"
+                 ng-if="vm.form.password.$dirty">
+              <div ng-message="required">Password is required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" ng-click="vm.login()">
+              Sign in
+            </button>
+          </div>
+          <div class="form-group">
+            <small>
+              <a class="pull-right login-link">
+                Forgot password ?</a>
+            </small>
+            <span class="clearfix"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

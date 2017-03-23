@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h3>Profile: {{vm.user.firstName}} {{vm.user.lastName}}</h3>
+</div>
+<div class="row profile">
+  <div class="col-lg-6">
+    <dl class="dl-horizontal">
+      <dt>
+        Full name
+      </dt>
+      <dd>
+        {{vm.user.firstName}} {{vm.user.lastName}}
+        <button class="btn btn-default btn-xs m-l-1" title="Edit Name" ng-click="vm.changeName()">
+          <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>
+        </button>
+      </dd>
+      <dt>
+        Email
+      </dt>
+      <dd>
+        {{vm.user.email}}
+      </dd>
+      <dt>
+        Password
+      </dt>
+      <dd>
+        <a href="" ng-click="vm.changePassword()">Change Password</a>
+      </dd>
+    </dl>
+  </div>
+
+</div>

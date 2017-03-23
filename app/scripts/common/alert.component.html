@@ -1,0 +1,5 @@
+<div uib-alert ng-repeat="alert in $ctrl.alerts" ng-class="'alert-' + (alert.type || 'danger')"
+     close="$ctrl.closeAlert($index)">
+  <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
+  <span ng-bind-html="alert.msg"></span>
+</div>

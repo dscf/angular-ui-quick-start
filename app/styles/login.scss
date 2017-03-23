@@ -1,0 +1,72 @@
+.login {
+  background-size: cover;
+  overflow-y: auto;
+  background: url("../images/login-background1.jpg") fixed center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  .login-container {
+    margin: 10% auto;
+    .panel {
+      background-color: rgba(255, 255, 255, 0.1);
+      .logo {
+        height: 95px;
+        color: #fff;
+        font-size: 50px;
+      }
+      > .panel-heading {
+        background-color: rgba(244, 244, 244, 0.2);
+      }
+
+      > .panel-body {
+        margin: 0 auto;
+        .login-form {
+          input[type="text"], input[type="password"] {
+            padding-left: 40px;
+          }
+          .login-link {
+            color: #FAF4F4;
+          }
+          .form-group {
+            position: relative;
+            .form-icon {
+              position: absolute;
+              top: 10px;
+              left: 0px;
+              width: 40px;
+              text-align: center;
+              color: #7B7878;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 499px) {
+  .login-container {
+    .panel {
+      margin: auto 30px;
+    }
+  }
+}
+
+@media(min-width: 400px) {
+  .logo {
+    height: 95px;
+  }
+}
+
+@media (min-width: 500px) {
+  .login-container {
+    width: 500px;
+    .panel {
+      > .panel-body {
+        width: 300px;
+      }
+    }
+  }
+}

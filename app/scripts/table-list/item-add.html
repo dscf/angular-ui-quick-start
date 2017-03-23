@@ -1,0 +1,99 @@
+<div class="page-header">
+  <h3>Add Item</h3>
+</div>
+<div class="row">
+  <div class="col-lg-8">
+    <ss-alert></ss-alert>
+    <form class="form-horizontal" novalidate name="vm.form">
+      <div class="form-group" ng-class="{'has-error': vm.form.name.$invalid && vm.form.name.$dirty}">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10 ">
+          <input type="text" class="form-control" autofocus
+                 name="name" id="name" placeholder="Name" ng-model="vm.item.name" required
+                 ng-maxlength="50"
+                 ng-pattern="/^[a-zA-Z0-9_\s\.\-]*$/">
+          <div ng-messages="vm.form.name.$error" role="alert" class=" text-danger"
+               ng-if="vm.form.name.$dirty">
+            <div ng-message="required">{{g('NAME_REQUIRED', 'Name is required')}}</div>
+            <div ng-message="pattern">{{g('NAME_INVALID', 'Name is invalid')}}</div>
+            <div ng-message="maxlength">{{g('NAME_TOO_LONG', 'Name is too long')}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="property1" class="col-sm-2 control-label">Property 1</label>
+        <div class="col-sm-10">
+          <select class="form-control" name="property1" id="property1" ng-model="vm.item.property1">
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Property 2</label>
+          <div class="col-sm-10">
+            <div class="radio radio-inline">
+              <input type="radio" name="source" id="option1" value="1" ng-model="vm.item.property2">
+              <label for="option1">
+                Option 1 </label>
+            </div>
+            <div class="radio radio-inline">
+              <input type="radio" name="source" id="option2" value="2" ng-model="vm.item.property2">
+              <label for="option2">
+                Option 2 </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <label for="property3" class="col-sm-2 control-label">
+              Property 3</label>
+          </div>
+          <div class="col-sm-10">
+            <div class="checkbox checkbox-primary checkbox-inline">
+              <input id="property3" class="styled" type="checkbox" ng-model="vm.item.property3"
+              >
+              <label></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">File</label>
+          <div class="col-sm-10">
+            <div>
+              <ss-dropzone class="dropzone" config="vm.dzConfig" accepted-files=".txt, .xml, .png"
+                           handlers="{'sending': vm.sendingFile, 'removedfile': vm.removeFile, 'success': vm.uploadSuccessful, 'error': vm.uploadFailed }">
+                <div class="dz-message ">
+                  <i class="fa fa-upload fa-fw fa-lg" aria-hidden="true"></i>
+                  Drop files here or click to upload
+                </div>
+              </ss-dropzone>
+              <div ng-messages="vm.form.fileId.$error" role="alert" class="text-danger"
+                   ng-if="vm.form.fileId.$dirty">
+                <div ng-message="required"> File is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="button" class="btn btn-primary " ng-click="vm.saveNew()" ng-disabled="vm.form.$invalid">
+            Create
+          </button>
+          <button type="button" class="btn btn-default " ng-click="vm.backToList()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

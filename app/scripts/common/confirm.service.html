@@ -1,0 +1,10 @@
+<div class="modal-header" ng-if="vm.title">
+  {{vm.title}}
+</div>
+<div class="modal-body"><h3>{{vm.message}}</h3></div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+  <button class="btn" ng-class="vm.buttonType"
+          ng-click="vm.confirm()">{{vm.actionButton}}
+  </button>
+</div>
