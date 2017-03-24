@@ -3,9 +3,7 @@
   angular.module('angular-ui-quick-start')
     .controller('TableListController', TableListController);
 
-  function TableListController(TableListService, $stateParams,
-                                     $state, Confirm, toastr, blockUI,
-                                     ErrorHandler) {
+  function TableListController(TableListService, $stateParams, $state, Confirm, toastr, blockUI, ErrorHandler) {
     //setup view model
     var vm, currentPage;
     vm = this;
