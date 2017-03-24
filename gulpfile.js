@@ -9,7 +9,6 @@ var lazypipe = require('lazypipe');
 var rimraf = require('rimraf');
 var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
-var minifyHtml = require("gulp-minify-html");
 var ngHtml2Js = require("gulp-ng-html2js");
 
 var concat = require('gulp-concat');
@@ -91,7 +90,7 @@ var lintScripts = function(src, fail) {
   } else {
     return lint;
   }
-}
+};
 
 var styles = lazypipe()
   .pipe($.sass, {
@@ -104,43 +103,6 @@ var styles = lazypipe()
 ///////////
 // Tasks //
 ///////////
-
-//extract i18n message keys
-function extractMessageKeys() {
-  return through2.obj(function(file, enc, cb) {
-    var matches, pair, content = '';
-    if (file.isNull()) {
-      return cb(null, file);
-    }
-    if (file.isBuffer()) {
-      matches = file.contents.toString().match(/\{\{g\('(.*)',\s'(.*)'\)\}\}/g);
-      if (matches && matches.length > 0) {
-        matches.forEach(function(i) {
-          pair = i.match(/\{\{g\('(.*)',\s'(.*)'\)\}\}/);
-          if (pair && pair.length === 3) {
-            content += pair[1] + ': \'' + pair[2] + '\',\n';
-          }
-        });
-        file.contents = new Buffer(content);
-      } else {
-        file.contents = null;
-      }
-    }
-
-    cb(null, file);
-  });
-}
-
-//this task will generate messages.en_us.js in .tmp folder
-// by extracting all the `key: message` from html files.
-// so later on we can give this file to language specialist to translate it
-// to other languages and put it back to language.service.js
-gulp.task('i18n', ['html'], function() {
-  gulp.src('.tmp/views/*html')
-    .pipe(extractMessageKeys())
-    .pipe(concat('messages.en_us.js'))
-    .pipe(gulp.dest('.tmp'));
-});
 
 gulp.task('lint-e2e', function() {
   return lintScripts(conf.test + '/e2e/spec/**/*.js', true);
@@ -351,7 +313,7 @@ gulp.task('revreplace', function() {
       manifest: manifest
     }))
     .pipe(gulp.dest(conf.dist));
-})
+});
 
 gulp.task('copyMainview', ['post-main-view'], function() {
   return gulp.src('.tmp/index.html').pipe(gulp.dest(conf.dist));
